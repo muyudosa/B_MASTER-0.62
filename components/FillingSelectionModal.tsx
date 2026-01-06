@@ -14,17 +14,17 @@ const FillingSelectionModal: React.FC<FillingSelectionModalProps> = ({ isOpen, o
 
     return (
         <div 
-            className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center backdrop-blur-sm transition-opacity duration-200"
+            className="fixed inset-0 z-[100] bg-black/40 flex items-center justify-center backdrop-blur-[2px] transition-opacity duration-100"
             onClick={onClose}
             aria-modal="true"
             role="dialog"
         >
             <div 
-                className="bg-white/95 rounded-2xl shadow-2xl border-4 border-amber-300 p-6 w-full max-w-md m-4 transform animate-customer-pop-in"
+                className="bg-white/95 rounded-3xl shadow-2xl border-4 border-amber-300 p-4 sm:p-6 w-full max-w-2xl m-4 transform animate-modal-in"
                 onClick={(e) => e.stopPropagation()} 
             >
-                <h2 className="text-center text-3xl font-bold text-amber-800 mb-6">어떤 속을 넣을까요?</h2>
-                <div className="grid grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto p-2">
+                <h2 className="text-center text-xl sm:text-3xl font-black text-amber-900 mb-4 tracking-tight">어떤 속을 넣을까요?</h2>
+                <div className="grid grid-cols-4 gap-2 sm:gap-3 p-1">
                     {Object.values(FillingType).map((filling) => {
                         const fillingType = filling as FillingType;
                         const details = FILLING_DETAILS[fillingType];
@@ -33,19 +33,19 @@ const FillingSelectionModal: React.FC<FillingSelectionModalProps> = ({ isOpen, o
                             <button 
                                 key={fillingType}
                                 onClick={() => onSelect(fillingType)}
-                                className="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-4 border-amber-200 bg-amber-50 hover:bg-white hover:border-orange-400 hover:scale-105 transform transition-all shadow-md group"
+                                className="flex flex-col items-center justify-center gap-1 p-2 sm:p-3 rounded-2xl border-2 border-amber-100 bg-amber-50 hover:bg-white hover:border-orange-400 active:scale-95 transform transition-all shadow-sm group"
                             >
-                                <div className="w-16 h-16 group-hover:animate-icon-pop">
+                                <div className="w-10 h-10 sm:w-14 sm:h-14 group-hover:scale-110 transition-transform duration-150">
                                     <Icon />
                                 </div>
-                                <span className={`font-bold text-lg ${details.textColor}`}>{details.label}</span>
+                                <span className={`font-black text-[11px] sm:text-sm whitespace-nowrap ${details.textColor}`}>{details.label}</span>
                             </button>
                         );
                     })}
                 </div>
                 <button 
                     onClick={onClose}
-                    className="mt-6 w-full py-3 bg-stone-200 text-stone-600 font-bold rounded-xl hover:bg-stone-300 transition-colors"
+                    className="mt-4 w-full py-2.5 bg-stone-100 text-stone-500 font-black rounded-xl hover:bg-stone-200 transition-colors text-sm"
                 >
                     취소
                 </button>

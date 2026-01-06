@@ -7,9 +7,9 @@ import { FillingType, UpgradeType } from './types';
 export const BASE_PRICE_PER_BUN = 500;
 
 // Unchanged constants
-export const BURN_TIME_MS = 3000;
-export const CUSTOMER_SPAWN_MIN_MS = 5000;
-export const CUSTOMER_SPAWN_MAX_MS = 12000;
+export const BURN_TIME_MS = 1500; // Faster burn time to match lightning-fast cook speed (was 2500)
+export const CUSTOMER_SPAWN_MIN_MS = 4000;
+export const CUSTOMER_SPAWN_MAX_MS = 10000;
 export const MAX_CUSTOMERS = 4;
 export const CUSTOMER_ICONS = ['👨', '👩', '👴', '👵', '👦', '👧', '👨‍🦱', '👩‍🦰', '👨‍🦳', '👩‍🦳', '👱‍♂️', '👱‍♀️', '👨‍⚕️', '👩‍🏫', '👨‍🎓', '👩‍🌾'];
 
@@ -36,10 +36,10 @@ export const UPGRADE_CONFIG: Record<UpgradeType, UpgradeConfigInfo> = {
     [UpgradeType.COOK_SPEED]: {
         name: '굽기 속도 향상',
         levels: [
-            { cost: 0, value: 3000 }, // 3s
-            { cost: 7000, value: 2500 }, // 2.5s
-            { cost: 20000, value: 2000 }, // 2s
-            { cost: 50000, value: 1500 }, // 1.5s
+            { cost: 0, value: 1200 }, // Extremely fast base speed (was 2000)
+            { cost: 7000, value: 800 },  // Now 0.8s
+            { cost: 20000, value: 500 }, // Now 0.5s
+            { cost: 50000, value: 300 }, // Max level: 0.3s (Almost instant)
         ],
         description: (value: number) => `굽는 시간 ${value / 1000}초`
     },
@@ -137,7 +137,7 @@ export const FILLING_DETAILS: Record<FillingType, { textColor: string; label: st
     [FillingType.HONEY]: { textColor: 'text-amber-600', label: '벌꿀' },
 };
 
-// --- SVG Icon Components (unmemoized) ---
+// --- SVG Icon Components ---
 const RedBeanSVG = () => (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <title>Red Bean</title>
@@ -176,12 +176,10 @@ const ChouxCreamSVG = () => (
             </filter>
         </defs>
         <g filter="url(#cream-shadow-realistic)">
-            {/* Main Swirl Body */}
             <path 
                 d="M12 22 C 4 22 3 15 9.5 13 C 10.5 12.5 10 10 12 7 C 14 10 13.5 12.5 14.5 13 C 21 15 20 22 12 22 Z"
                 fill="url(#chouxCreamGradRealistic)"
             />
-            {/* Highlight */}
             <path 
                 d="M9 14 C 11 12, 13 12, 15 14 C 14 15, 12 15.5, 10 15 C 9 14.5, 9 14, 9 14 Z"
                 fill="white"
@@ -193,7 +191,6 @@ const ChouxCreamSVG = () => (
                 fill="white"
                 opacity="0.25"
             />
-             {/* Ridges for piped effect */}
             <path
                 d="M5.5 19 C 7 16, 8.5 14, 9.5 13"
                 stroke="#fef9c3" strokeWidth="1" fill="none" opacity="0.7" strokeLinecap="round"
@@ -252,9 +249,7 @@ const SweetPotatoSVG = () => (
             </filter>
         </defs>
         <g filter="url(#potato-shadow-cut)">
-            {/* Skin */}
             <path d="M 4 15 C 2 12, 6 6, 12 6 C 18 6, 22 10, 20 16 C 18 22, 8 20, 4 15 Z" fill="url(#sweetPotatoSkinGrad2)" />
-            {/* Flesh */}
             <path d="M 5 14.5 C 3.5 12, 7 7.5, 12.5 7 C 17.5 6.5, 20.5 10, 19.5 15 C 18.5 19.5, 9 19, 5 14.5 Z" fill="url(#sweetPotatoFleshGrad)" />
         </g>
     </svg>
@@ -296,13 +291,8 @@ const StrawberrySVG = () => (
             </filter>
         </defs>
         <g filter="url(#strawberry-shadow-realistic)">
-            {/* Strawberry Body */}
             <path d="M12 5 C 6 5, 4 12, 11.5 21 C 12 21.8, 12 21.8, 12.5 21 C 20 12, 18 5, 12 5 Z" fill="url(#strawberryGradRealistic)" />
-
-            {/* Highlight */}
             <path d="M10 8 C 12 7, 14 7.5, 15 9.5 C 13.5 10, 11.5 9.5, 10 8 Z" fill="white" opacity="0.25" />
-
-            {/* Seeds */}
             <g fill="#fef08a" opacity="0.9">
                 <ellipse cx="9.5" cy="11" rx="0.5" ry="0.7" transform="rotate(-20 9.5 11)" />
                 <ellipse cx="14.5" cy="11" rx="0.5" ry="0.7" transform="rotate(20 14.5 11)" />
@@ -313,14 +303,10 @@ const StrawberrySVG = () => (
                 <ellipse cx="14" cy="17" rx="0.5" ry="0.7" transform="rotate(10 14 17)" />
                 <ellipse cx="12" cy="9" rx="0.5" ry="0.7" />
             </g>
-
-            {/* Calyx (Leaves) */}
             <g fill="#22c55e" stroke="#16a34a" strokeWidth="0.5" strokeLinejoin="round">
                 <path d="M12 5.5 L 7 8 Q 12 6, 17 8 Z" />
                 <path d="M12 5.5 L 9 9 Q 12 7, 15 9 Z" />
             </g>
-            
-            {/* Stem */}
             <path d="M12 3 L 12 5.5" stroke="#15803d" strokeWidth="1.5" strokeLinecap="round" />
         </g>
     </svg>
@@ -374,13 +360,10 @@ const HoneySVG = () => (
             </filter>
         </defs>
         <g filter="url(#honey-shadow)">
-            {/* Hexagons for honeycomb */}
             <path d="M12 4 L16 6 L16 10 L12 12 L8 10 L8 6 Z" fill="url(#honeyGrad)" stroke="#ca8a04" strokeWidth="0.7"/>
             <path d="M8 6 L12 8 L12 12 L8 14 L4 12 L4 8 Z" fill="url(#honeyGrad)" stroke="#ca8a04" strokeWidth="0.7"/>
             <path d="M16 6 L20 8 L20 12 L16 14 L12 12 L12 8 Z" fill="url(#honeyGrad)" stroke="#ca8a04" strokeWidth="0.7"/>
             <path d="M12 12 L16 14 L16 18 L12 20 L8 18 L8 14 Z" fill="url(#honeyGrad)" stroke="#ca8a04" strokeWidth="0.7"/>
-
-            {/* Dripping Honey */}
             <path d="M5 13 C 5 16, 4 16, 4.5 18 C 5 20, 6 20, 6 18 C 5.5 16, 6 16, 5 13 Z" fill="#facc15" />
             <path d="M19 13 C 19 16, 18 16, 18.5 18 C 19 20, 20 20, 20 18 C 19.5 16, 20 16, 19 13 Z" fill="#facc15" transform="rotate(10 19 13)" />
         </g>
@@ -392,42 +375,36 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
     const finGradId = `bungeo-fin-grad-${crustLevel}`;
     const shadowFilterId = `bungeo-shadow-3d`;
 
-    // Stroke colors based on crust level
     const mainStrokeColor = crustLevel === 3 ? "#111827" : "#854d0e";
     const detailStrokeColor = crustLevel === 3 ? "#000" : "#92400e";
 
     return (
         <svg viewBox="0 0 64 42" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" overflow="visible">
             <defs>
-                {/* Level 0 Gradients */}
                 <radialGradient id="bungeo-body-grad-0" cx="50%" cy="50%" r="70%" fx="70%" fy="40%">
                     <stop offset="0%" stopColor="#fef3c7" /><stop offset="60%" stopColor="#f59e0b" /><stop offset="100%" stopColor="#92400e" />
                 </radialGradient>
                 <linearGradient id="bungeo-fin-grad-0" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#f59e0b" /><stop offset="100%" stopColor="#b45309" />
                 </linearGradient>
-                {/* Level 1 Gradients */}
                 <radialGradient id="bungeo-body-grad-1" cx="50%" cy="50%" r="70%" fx="70%" fy="40%">
                     <stop offset="0%" stopColor="#fffbeb" /><stop offset="60%" stopColor="#facc15" /><stop offset="100%" stopColor="#b45309" />
                 </radialGradient>
                 <linearGradient id="bungeo-fin-grad-1" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#facc15" /><stop offset="100%" stopColor="#d97706" />
                 </linearGradient>
-                {/* Level 2 Gradients */}
                 <radialGradient id="bungeo-body-grad-2" cx="50%" cy="50%" r="70%" fx="70%" fy="40%">
                     <stop offset="0%" stopColor="#fefce8" /><stop offset="60%" stopColor="#fde047" /><stop offset="100%" stopColor="#ca8a04" />
                 </radialGradient>
                 <linearGradient id="bungeo-fin-grad-2" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#fde047" /><stop offset="100%" stopColor="#eab308" />
                 </linearGradient>
-                {/* Level 3 Gradients (Charcoal) */}
                 <radialGradient id="bungeo-body-grad-3" cx="50%" cy="50%" r="70%" fx="70%" fy="40%">
                     <stop offset="0%" stopColor="#4b5563" /><stop offset="60%" stopColor="#1f2937" /><stop offset="100%" stopColor="#111827" />
                 </radialGradient>
                 <linearGradient id="bungeo-fin-grad-3" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#374151" /><stop offset="100%" stopColor="#111827" />
                 </linearGradient>
-                {/* Level 4 Gradients (Rainbow) */}
                 <radialGradient id="bungeo-body-grad-4" cx="50%" cy="50%" r="70%" fx="70%" fy="40%">
                     <stop offset="0%" stopColor="#f87171" /><stop offset="20%" stopColor="#fbbf24" /><stop offset="40%" stopColor="#a3e635" /><stop offset="60%" stopColor="#38bdf8" /><stop offset="80%" stopColor="#a78bfa" /><stop offset="100%" stopColor="#f472b6" />
                     <animateTransform attributeName="gradientTransform" type="rotate" values="0 0.5 0.5; 360 0.5 0.5" dur="4s" repeatCount="indefinite" />
@@ -435,18 +412,13 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                 <linearGradient id="bungeo-fin-grad-4" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#f87171" /><stop offset="50%" stopColor="#a3e635" /><stop offset="100%" stopColor="#a78bfa" />
                 </linearGradient>
-
-                {/* Decoration Gradients */}
                 <radialGradient id="cherryGrad" cx="0.3" cy="0.3" r="0.8">
                     <stop offset="0%" stopColor="#ef4444" />
                     <stop offset="100%" stopColor="#b91c1c" />
                 </radialGradient>
-
-                {/* New Shadow filter for 3D effect */}
                 <filter id={shadowFilterId} x="-20%" y="-20%" width="140%" height="140%">
                     <feDropShadow dx="1" dy="1.5" stdDeviation="1" floodColor="#000" floodOpacity="0.2"/>
                 </filter>
-                
                 {crustLevel === 2 && (
                     <filter id="bungeo-glow" x="-50%" y="-50%" width="200%" height="200%">
                         <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
@@ -456,7 +428,6 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                         </feMerge>
                     </filter>
                 )}
-                 {/* New Embers glow for charcoal */}
                 <filter id="embers-glow" x="-50%" y="-50%" width="200%" height="200%">
                     <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -484,7 +455,6 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                         strokeWidth="1.5"
                         strokeLinejoin="round"
                     />
-                     {/* Volumetric Highlight */}
                     <path
                         d="M25,12 C35,8, 45,9, 52,16 C 50,15, 40,13, 30,14 Z"
                         fill="white"
@@ -492,14 +462,12 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                         style={{ filter: 'blur(1px)' }}
                         transform="rotate(-2)"
                     />
-                    {/* Volumetric Shading */}
                     <path
                         d="M30,36 C40,39, 48,39, 53,35 C 50,36, 40,37, 33,34 Z"
                         fill="#000"
                         opacity={crustLevel === 3 ? '0.2' : '0.1'}
                         style={{ filter: 'blur(2px)' }}
                     />
-
                     <path 
                         d="M44,4.8 Q 48,3 51.3,4.5 L 48,9 L 44,8 Z"
                         fill={`url(#${finGradId})`}
@@ -519,10 +487,7 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                     <circle cx="28.9" cy="17.6" r="0.7" fill="white" opacity="0.8"/>
                     <path d="M26,23 C27.5,24.5,30,24.2,31,23.2" stroke={mainStrokeColor} strokeWidth="1.2" fill="none" strokeLinecap="round" />
                 </g>
-                
-                 {/* NEW VISUAL EFFECTS BASED ON CRUST LEVEL */}
                 <g transform="scale(-1, 1) translate(-64, 0)" style={{ pointerEvents: 'none' }}>
-                    {/* Level 1: Golden Crust - subtle sparkles */}
                     {crustLevel === 1 && (
                         <g fill="#fffbeb" opacity="0.8">
                             <path d="M38 18 l 1 2 l 2 -2 l -2 -2 z">
@@ -536,8 +501,6 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                             </circle>
                         </g>
                     )}
-                    
-                    {/* Level 2: Dazzling Crust - star glint */}
                     {crustLevel === 2 && (
                         <g>
                            <path d="M35 15 l 2 2 l 8 -8 l -2 -2 z" fill="white" opacity="0.7">
@@ -548,90 +511,33 @@ const BungeoppangSVG: React.FC<{crustLevel?: number; decorationLevel?: number;}>
                                <animateTransform attributeName="transform" type="rotate" from="90 40 10" to="110 40 10" dur="8s" repeatCount="indefinite" />
                                <animate attributeName="opacity" values="0;0.7;0" dur="3s" repeatCount="indefinite" begin="0s" />
                            </path>
-                           <path d="M50 28 l 1 1 l 4 -4 l -1 -1 z" fill="white" opacity="0.5">
-                               <animate attributeName="opacity" values="0;0.5;0" dur="3s" repeatCount="indefinite" begin="1.5s" />
-                           </path>
-                           <path d="M50 28 l 1 1 l 4 -4 l -1 -1 z" fill="white" opacity="0.5" transform="rotate(90 52 26)">
-                               <animate attributeName="opacity" values="0;0.5;0" dur="3s" repeatCount="indefinite" begin="1.5s" />
-                           </path>
                         </g>
                     )}
-
-                    {/* Level 3: Charcoal Crust - glowing embers */}
                     {crustLevel === 3 && (
                         <g filter="url(#embers-glow)">
                             <path d="M37,14 C38.5,19.5,38.2,25.5,36.5,30" stroke="#ff4500" strokeWidth="0.8" fill="none" opacity="0.7">
                                 <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.5s" repeatCount="indefinite" />
                             </path>
-                            <path d="M48,16 C49,20,48,23,47,26" stroke="#ff8c00" strokeWidth="0.6" fill="none" opacity="0.6">
-                                <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite" begin="0.8s" />
-                            </path>
-                             <path d="M26,23 C27.5,24.5,30,24.2,31,23.2" stroke="#ff4500" strokeWidth="0.7" fill="none" strokeLinecap="round" opacity="0.5">
-                                 <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite" />
-                             </path>
-                        </g>
-                    )}
-
-                    {/* Level 4: Rainbow Crust - tiny star sparkles */}
-                    {crustLevel === 4 && (
-                        <g opacity="0.9">
-                            <path d="M36 24 l 0.5 1 l 1 -1 l -1 -1 z" fill="#f472b6">
-                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.1s" />
-                            </path>
-                            <path d="M45 18 l 0.5 1 l 1 -1 l -1 -1 z" fill="#60a5fa">
-                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.6s" />
-                            </path>
-                            <path d="M51 26 l 0.5 1 l 1 -1 l -1 -1 z" fill="#4ade80">
-                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="1.1s" />
-                            </path>
                         </g>
                     )}
                 </g>
-                
                 {decorationLevel === 1 && (
                     <g transform="scale(-1, 1) translate(-64, 0)" fill="white" opacity="0.9">
                         <circle cx="35" cy="22" r="0.7" />
                         <circle cx="40" cy="28" r="0.9" />
                         <circle cx="45" cy="20" r="0.6" />
                         <circle cx="48" cy="25" r="0.8" />
-                        <circle cx="38" cy="16" r="0.5" />
-                        <circle cx="52" cy="18" r="0.7" />
-                        <circle cx="33" cy="30" r="0.6" />
-                        <circle cx="43" cy="32" r="0.8" />
                     </g>
                 )}
                 {decorationLevel === 2 && (
                      <g transform="scale(-1, 1) translate(-64, 0)" stroke="#451a03" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.8">
                         <path d="M33,34 C 38,28 40,29 45,24 S 50,28 55,22" />
-                        <path d="M36,37 C 41,31 43,32 48,27 S 53,31 58,25" />
                      </g>
                 )}
                 {decorationLevel === 3 && (
                      <g transform="scale(-1, 1) translate(-64, 0)" filter="url(#crown-glow)">
                         <path d="M26,12 L28,8 L30,10 L32,8 L34,12 L26,12 Z" fill="#fde047" stroke="#ca8a04" strokeWidth="0.7" />
                      </g>
-                )}
-                {decorationLevel === 4 && (
-                    <g transform="scale(-1, 1) translate(-64, 0)" opacity="0.9">
-                        <rect x="35" y="22" width="4" height="1.5" rx="1" fill="#f472b6" transform="rotate(20 35 22)" />
-                        <rect x="40" y="28" width="4" height="1.5" rx="1" fill="#60a5fa" transform="rotate(-10 40 28)" />
-                        <rect x="45" y="20" width="4" height="1.5" rx="1" fill="#facc15" transform="rotate(45 45 20)" />
-                        <rect x="48" y="25" width="4" height="1.5" rx="1" fill="#4ade80" transform="rotate(-30 48 25)" />
-                        <rect x="38" y="16" width="4" height="1.5" rx="1" fill="#f472b6" transform="rotate(10 38 16)" />
-                        <rect x="52" y="18" width="4" height="1.5" rx="1" fill="#60a5fa" transform="rotate(50 52 18)" />
-                        <rect x="33" y="30" width="4" height="1.5" rx="1" fill="#facc15" transform="rotate(0 33 30)" />
-                        <rect x="43" y="32" width="4" height="1.5" rx="1" fill="#4ade80" transform="rotate(-20 43 32)" />
-                        <rect x="50" y="30" width="4" height="1.5" rx="1" fill="#f472b6" transform="rotate(30 50 30)" />
-                    </g>
-                )}
-                {decorationLevel === 5 && (
-                    <g transform="scale(-1, 1) translate(-64, 0)">
-                        <g transform="translate(45, 12)" filter="url(#crown-glow)">
-                             <path d="M-3,1 Q-5,-4 0,-4" stroke="#166534" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                             <circle cx="0" cy="0" r="4" fill="url(#cherryGrad)" stroke="#7f1d1d" strokeWidth="0.5" />
-                             <circle cx="-1.5" cy="-1.5" r="1" fill="white" opacity="0.5" />
-                        </g>
-                    </g>
                 )}
             </g>
         </svg>
@@ -734,8 +640,6 @@ const PlateSVG = () => (
     </svg>
 );
 
-
-// FIX: Changed React.FC to React.ComponentType<any> for the icons to resolve "Expected 1 arguments, but got 0" errors in strict TypeScript environments when used in JSX without explicit props.
 export const ICONS: { [key in FillingType]: React.ComponentType<any> } & { BUNGEOPPANG: React.ComponentType<any>; GOLDEN_BUNGEOPPANG: React.ComponentType<any>; BASKET: React.ComponentType<any>; PLATE: React.ComponentType<any>; } = {
     [FillingType.RED_BEAN]: React.memo(RedBeanSVG),
     [FillingType.CHOUX_CREAM]: React.memo(ChouxCreamSVG),

@@ -18,7 +18,6 @@ interface MoldProps {
 const MoldComponent: React.FC<MoldProps> = ({ mold, setMolds, setServingPlate, setFillingTarget, cookTime, upgrades, isSelected }) => {
     const lastState = useRef(mold.state);
 
-    // 상태 변화 감지 및 사운드 재생
     useEffect(() => {
         if (lastState.current !== mold.state) {
             if (mold.state === MoldState.COOKING) soundManager.playSizzle();
@@ -92,7 +91,6 @@ const MoldComponent: React.FC<MoldProps> = ({ mold, setMolds, setServingPlate, s
             
             if (ratio > 0.7) {
                 isCritical = true;
-                // 타기 직전 경고음 (매초 틱마다 작게 재생할 수도 있음)
             }
         }
         
@@ -148,22 +146,20 @@ const MoldComponent: React.FC<MoldProps> = ({ mold, setMolds, setServingPlate, s
             )}
 
             {(mold.state === MoldState.COOKING || mold.state === MoldState.READY) && (
-                <div className="absolute bottom-0 left-0 w-full h-2.5 bg-black/40 backdrop-blur-sm">
+                <div className="absolute bottom-0 left-0 w-full h-4 bg-black/40 backdrop-blur-sm">
                     <div
-                        className={`h-full ${progressInfo.isCritical ? 'animate-pulse' : ''}`}
+                        className={`h-full transition-all duration-100 ${progressInfo.isCritical ? 'animate-fire-flicker' : ''}`}
                         style={{ 
                             width: progressInfo.width, 
                             backgroundColor: progressInfo.color,
-                            boxShadow: `0 0 10px ${progressInfo.color}`,
-                            transition: 'none'
                         }}
-                    ></div>
+                    />
                 </div>
             )}
             
             {progressInfo.isCritical && (
-                <div className="absolute top-1 right-1 text-[10px] font-bold text-red-500 animate-bounce bg-black/50 px-1 rounded shadow-lg">
-                    !위험!
+                <div className="absolute top-1 right-1 text-[12px] font-black text-white animate-pulse bg-red-600 px-2 py-0.5 rounded-full shadow-[0_0_10px_#ef4444] z-10 border border-white/30 uppercase">
+                    위험!
                 </div>
             )}
         </div>

@@ -28,7 +28,7 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ totalRevenue, upgrades, onP
             soundManager.playUpgrade();
             onPurchaseUpgrade(upgradeType);
         } else {
-            soundManager.playBurnt(); // 돈 부족 경고음 대용
+            soundManager.playBurnt(); 
         }
     };
 
@@ -39,21 +39,21 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ totalRevenue, upgrades, onP
 
     return (
         <div
-            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center backdrop-blur-sm animate-customer-pop-in"
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center backdrop-blur-md animate-customer-pop-in p-2 sm:p-4"
             onClick={handleClose}
             aria-modal="true"
             role="dialog"
         >
             <div
-                className="bg-amber-50 rounded-3xl shadow-2xl border-4 border-amber-300 p-6 sm:p-10 w-full max-w-2xl m-4 flex flex-col"
+                className="bg-amber-50 rounded-[32px] sm:rounded-[48px] shadow-2xl border-4 sm:border-8 border-amber-400 p-4 sm:p-8 w-full max-w-3xl max-h-[90vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="text-center text-4xl sm:text-5xl font-black text-amber-800 mb-3">가게 업그레이드</h2>
-                <div className="text-center mb-6 text-2xl sm:text-3xl font-black text-amber-900 bg-white/50 py-2 rounded-full border-2 border-amber-200">
-                    내 재산: ₩{totalRevenue.toLocaleString()}
+                <h2 className="text-center text-3xl sm:text-5xl font-black text-amber-900 mb-2 sm:mb-4 drop-shadow-sm">상점</h2>
+                <div className="text-center mb-4 sm:mb-6 text-xl sm:text-3xl font-black text-emerald-700 bg-white/80 py-2 sm:py-3 rounded-[20px] sm:rounded-[32px] border-2 border-amber-200 shadow-inner tabular-nums">
+                    보유 금액: ₩{totalRevenue.toLocaleString()}
                 </div>
 
-                <div className="space-y-4 mt-2 flex-grow overflow-y-auto pr-3 max-h-[55vh] custom-scrollbar">
+                <div className="space-y-3 sm:space-y-4 flex-grow overflow-y-auto pr-2 custom-scrollbar">
                     {Object.entries(UPGRADE_CONFIG).map(([key, config]) => {
                         const upgradeType = key as UpgradeType;
                         const currentLevel = upgrades[upgradeType] || 0;
@@ -67,22 +67,24 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ totalRevenue, upgrades, onP
                         return (
                             <div 
                                 key={upgradeType} 
-                                className={`p-4 sm:p-5 rounded-2xl flex items-center justify-between gap-4 border-2 relative transition-all ${isSpecial ? 'bg-yellow-100 border-yellow-400 shadow-lg' : 'bg-white border-amber-100 hover:border-amber-300 shadow-sm'}`}
+                                className={`p-3 sm:p-5 rounded-[20px] sm:rounded-[28px] flex items-center justify-between gap-3 sm:gap-6 border-2 relative transition-all ${isSpecial ? 'bg-yellow-100 border-yellow-500 shadow-lg' : 'bg-white border-amber-100 hover:border-amber-400 shadow-sm'}`}
                             >
-                               {isSpecial && <div className="absolute -top-3 -right-3 bg-red-500 text-white text-sm font-black px-3 py-1.5 rounded-full transform rotate-12 shadow-xl z-10 border-2 border-white">할인중!</div>}
-                                <div className="flex-grow">
-                                    <p className="font-black text-amber-900 text-xl sm:text-2xl mb-1">{config.name}</p>
-                                    <p className="text-base sm:text-lg text-stone-500 font-bold">현재: <span className="text-amber-700">{config.description(config.levels[currentLevel].value)}</span></p>
+                               {isSpecial && <div className="absolute -top-3 -right-2 bg-rose-600 text-white text-[10px] sm:text-sm font-black px-3 py-1 rounded-full transform rotate-12 shadow-md z-10 border-2 border-white animate-bounce">세일 중!</div>}
+                                <div className="flex-grow min-w-0">
+                                    <p className="font-black text-amber-950 text-lg sm:text-2xl truncate mb-0.5">{config.name}</p>
+                                    <p className="text-xs sm:text-base text-stone-500 font-bold leading-tight">
+                                        현재: <span className="text-amber-800">{config.description(config.levels[currentLevel].value)}</span>
+                                    </p>
                                 </div>
                                 <button
                                     onClick={() => handlePurchase(upgradeType)}
                                     disabled={isMaxLevel || (finalCost != null && totalRevenue < finalCost)}
-                                    className={`w-36 sm:w-44 py-3 sm:py-4 text-lg sm:text-xl font-black text-white rounded-xl shadow-md transition-all ${isMaxLevel ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 active:scale-95'}`}
+                                    className={`min-w-[90px] sm:min-w-[140px] py-2 sm:py-3 px-2 text-sm sm:text-xl font-black text-white rounded-[14px] sm:rounded-[18px] shadow-md transition-all border-b-4 ${isMaxLevel ? 'bg-stone-400 border-stone-600 cursor-not-allowed opacity-50' : (finalCost != null && totalRevenue < finalCost ? 'bg-stone-400 border-stone-600 grayscale' : 'bg-emerald-600 border-emerald-800 hover:brightness-110 active:translate-y-0.5 active:border-b-2')}`}
                                 >
-                                    {isMaxLevel ? 'MAX' : 
+                                    {isMaxLevel ? 'Max' : 
                                      isSpecial && originalCost ? (
-                                        <span className="flex flex-col items-center leading-tight">
-                                            <span className="line-through opacity-60 text-sm">₩{originalCost.toLocaleString()}</span>
+                                        <span className="flex flex-col items-center leading-none">
+                                            <span className="line-through opacity-60 text-[10px] sm:text-xs">₩{originalCost.toLocaleString()}</span>
                                             <span>₩{finalCost?.toLocaleString()}</span>
                                         </span>
                                      ) : `₩${finalCost?.toLocaleString()}`
@@ -93,12 +95,12 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ totalRevenue, upgrades, onP
                     })}
                 </div>
 
-                <div className="mt-8 text-center">
+                <div className="mt-4 sm:mt-6 text-center">
                     <button
                         onClick={handleClose}
-                        className="px-12 py-4 text-2xl font-black text-white bg-orange-500 rounded-full shadow-lg hover:bg-orange-600 active:scale-95 transition-all border-b-4 border-orange-700"
+                        className="px-8 sm:px-12 py-3 sm:py-4 text-xl sm:text-3xl font-black text-white bg-orange-600 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all border-b-[6px] sm:border-b-[8px] border-orange-800"
                     >
-                        창 닫기
+                        나가기
                     </button>
                 </div>
             </div>

@@ -67,10 +67,10 @@ const GameScreen: React.FC<GameScreenProps> = ({ day, goal, initialTime, onDayEn
         fillingsSold: {} as Partial<Record<FillingType, number>>,
     });
 
-    // FIX: Provided initial value undefined to satisfy strict TypeScript useRef argument requirement.
     const gameLoopId = useRef<number | undefined>(undefined);
     const lastFrameTimeRef = useRef(0);
     const nextCustomerSpawnTimeRef = useRef(0);
+    const prevCustomersLength = useRef(0);
 
     const startCooking = useCallback((id: number, filling: FillingType) => {
         setMolds(prevMolds => prevMolds.map(m =>
@@ -123,6 +123,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ day, goal, initialTime, onDayEn
 
         gameLoopId.current = requestAnimationFrame(runGameLoop);
     }, [isMiniGameActive, fillingTarget, patienceTime]);
+
+    useEffect(() => {
+        if (customers.length > prevCustomersLength.current) {
+            soundManager.playBell();
+        }
+        prevCustomersLength.current = customers.length;
+    }, [customers.length]);
 
     useEffect(() => {
         gameLoopId.current = requestAnimationFrame(runGameLoop);
@@ -218,31 +225,35 @@ const GameScreen: React.FC<GameScreenProps> = ({ day, goal, initialTime, onDayEn
     };
 
     return (
-        <div className="flex flex-col h-full bg-amber-50 rounded-lg p-2 sm:p-4 gap-2 sm:gap-4 relative overflow-hidden">
+        <div className="flex flex-col h-full bg-amber-50 rounded-lg p-2 sm:p-4 gap-2 relative overflow-hidden">
             <Header day={day} timeLeft={timeLeft} revenue={revenue} goal={goal} dailySpecial={dailySpecial} />
-            <div className="flex-grow flex flex-col lg:flex-row gap-4 overflow-hidden">
-                <div className="w-full lg:w-1/4 h-48 lg:h-full flex-shrink-0">
+            <div className="flex-grow flex flex-col lg:flex-row gap-2 overflow-hidden">
+                <div className="w-full lg:w-1/4 h-32 lg:h-full flex-shrink-0">
                     <CustomerQueue customers={customers} upgrades={upgrades}/>
                 </div>
-                <div className="w-full lg:w-3/4 flex-grow flex flex-col gap-4 relative">
-                    <BungeoppangGrill 
-                        molds={molds} 
-                        setMolds={setMolds} 
-                        addTimeout={() => {}} 
-                        setServingPlate={setServingPlate} 
-                        setFillingTarget={setFillingTarget}
-                        cookTime={cookTime}
-                        upgrades={upgrades}
-                        fillingTarget={fillingTarget}
-                    />
-                    <ControlPanel 
-                        servingPlate={servingPlate} 
-                        upgrades={upgrades} 
-                        onCleanAllMolds={() => {
-                            soundManager.playClick();
-                            setMolds(prev => prev.map(m => ({ ...m, state: MoldState.EMPTY, filling: null, progress: 0 })));
-                        }}
-                    />
+                <div className="w-full lg:w-3/4 flex-grow flex flex-col gap-2 relative">
+                    <div className="flex-grow min-h-0">
+                        <BungeoppangGrill 
+                            molds={molds} 
+                            setMolds={setMolds} 
+                            addTimeout={() => {}} 
+                            setServingPlate={setServingPlate} 
+                            setFillingTarget={setFillingTarget}
+                            cookTime={cookTime}
+                            upgrades={upgrades}
+                            fillingTarget={fillingTarget}
+                        />
+                    </div>
+                    <div className="flex-shrink-0">
+                        <ControlPanel 
+                            servingPlate={servingPlate} 
+                            upgrades={upgrades} 
+                            onCleanAllMolds={() => {
+                                soundManager.playClick();
+                                setMolds(prev => prev.map(m => ({ ...m, state: MoldState.EMPTY, filling: null, progress: 0 })));
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
             

@@ -90,6 +90,12 @@ class SoundManager {
   playWarning() {
     this.createOscillator(440, 'square', 0.05, 0.05);
   }
+
+  // 8. 손님 등장 (딸랑!)
+  playBell() {
+    this.createOscillator(1200, 'sine', 0.2, 0.05);
+    setTimeout(() => this.createOscillator(1500, 'sine', 0.4, 0.04), 50);
+  }
 }
 
 export const soundManager = new SoundManager();

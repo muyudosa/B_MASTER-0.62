@@ -76,77 +76,44 @@
             }
         }
         
-        /* Springy Pop-in animation for new customers */
+        /* Refined Springy Pop-in animation for new customers */
         .animate-customer-pop-in {
-            animation: customer-pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            animation: customer-pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
         }
         @keyframes customer-pop-in {
             0% {
-                transform: translateY(20px) scale(0.85);
+                transform: translateY(30px) scale(0.7);
                 opacity: 0;
-                box-shadow: 0 0 0px rgba(251, 191, 36, 0);
+                filter: brightness(2);
             }
-            30% {
-                opacity: 1;
-                box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+            70% {
+                transform: translateY(-5px) scale(1.05);
+                filter: brightness(1.2);
             }
             100% {
                 transform: translateY(0) scale(1);
                 opacity: 1;
-                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+                filter: brightness(1);
             }
         }
-        
-        /* Fly-out animation for served items */
-        .serve-particle {
-            position: absolute;
-            width: 4rem; /* 64px */
-            height: 4rem; /* 64px */
-            bottom: 25%;
-            animation: serve-fly-out 1s ease-out forwards;
+
+        /* Ultra-fast Modal Animation for UI Snappiness */
+        .animate-modal-in {
+            animation: modal-in 0.15s ease-out both;
         }
-        @keyframes serve-fly-out {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-150px) scale(0.5); opacity: 0; }
+        @keyframes modal-in {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        
-        /* Tutorial Modal Icon Animations */
-        .animate-icon-bob { animation: icon-bob 2s ease-in-out infinite; }
-        @keyframes icon-bob {
-          0%, 100% { transform: translateY(0) rotate(0); }
-          50% { transform: translateY(-5px) rotate(3deg); }
+
+        /* Critical Warning Flicker */
+        @keyframes fire-flicker {
+            0%, 100% { opacity: 1; filter: brightness(1.2) saturate(1.5); }
+            50% { opacity: 0.7; filter: brightness(0.8) saturate(2); }
         }
-        .animate-icon-wiggle { animation: icon-wiggle 2.5s ease-in-out infinite; }
-        @keyframes icon-wiggle {
-          0%, 100% { transform: translateX(0) rotate(0); }
-          25% { transform: translateX(-4px) rotate(-3deg); }
-          75% { transform: translateX(4px) rotate(3deg); }
+        .animate-fire-flicker {
+            animation: fire-flicker 0.2s infinite ease-in-out;
         }
-        .animate-icon-pop { animation: icon-pop 1.5s ease-in-out infinite; }
-        @keyframes icon-pop {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.15); }
-        }
-        
-        /* Start Screen Animation CSS */
-        @keyframes hand-pour {
-          0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
-          20%, 60% { transform: translate(-20px, 10px) rotate(-30deg); opacity: 1; }
-          100% { transform: translate(-40px, 40px) rotate(-60deg); opacity: 0; }
-        }
-        .animate-hand-pour { animation: hand-pour 2s ease-in-out forwards; }
-        
-        @keyframes fill-in {
-          from { clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%); }
-          to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
-        }
-        .animate-fill-in { animation: fill-in 1.5s 0.3s ease-out forwards; }
-        
-        @keyframes pop-in-subtle {
-          from { transform: scale(0.8); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
-        }
-        .animate-pop-in-subtle { animation: pop-in-subtle 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both; }
         
         /* Glow for selected mold */
         .glow-on-select {
@@ -161,17 +128,10 @@
             }
         }
 
-        /* Floating background animation */
-        @keyframes float {
-          0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
-          100% { transform: translateY(0px) rotate(0deg); }
-        }
-        
         /* Tip Animation */
         .tip-particle {
             position: absolute;
-            transform: translateX(-50%); /* to center it horizontally on the left value */
+            transform: translateX(-50%);
             animation: tip-fly-up 1.5s ease-out forwards;
             display: flex;
             align-items: center;
@@ -181,7 +141,7 @@
             border-style: solid;
             border-radius: 9999px;
             font-weight: bold;
-            white-space: nowrap; /* Prevent text wrapping */
+            white-space: nowrap;
             z-index: 20;
         }
         @keyframes tip-fly-up {
@@ -190,28 +150,23 @@
             100% { transform: translateY(-120px) scale(0.9) translateX(-50%); opacity: 0; }
         }
         
-        /* Card flip animation classes */
         .transform-style-3d { transform-style: preserve-3d; }
         .rotate-y-180 { transform: rotateY(180deg); }
         .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 
-        /* Ladder Game Animation */
         .ladder-path {
             stroke-dasharray: var(--path-length);
             stroke-dashoffset: var(--path-length);
             animation: draw-path 3s ease-in-out forwards;
         }
         @keyframes draw-path {
-            to {
-                stroke-dashoffset: 0;
-            }
+            to { stroke-dashoffset: 0; }
         }
 
-        /* Explosion animation for shooter game */
         .explosion {
             position: absolute;
-            width: 4rem; /* 64px */
-            height: 4rem; /* 64px */
+            width: 4rem;
+            height: 4rem;
             background-image: radial-gradient(circle, #facc15, #f59e0b, transparent 60%);
             border-radius: 50%;
             transform: scale(0);
