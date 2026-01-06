@@ -14,17 +14,17 @@ const FillingSelectionModal: React.FC<FillingSelectionModalProps> = ({ isOpen, o
 
     return (
         <div 
-            className="fixed inset-0 z-[100] bg-black/40 flex items-center justify-center backdrop-blur-[2px] transition-opacity duration-100"
+            className="fixed inset-0 z-[100] bg-black/40 flex items-center justify-center backdrop-blur-[2px] p-2"
             onClick={onClose}
             aria-modal="true"
             role="dialog"
         >
             <div 
-                className="bg-white/95 rounded-3xl shadow-2xl border-4 border-amber-300 p-4 sm:p-6 w-full max-w-2xl m-4 transform animate-modal-in"
+                className="bg-white rounded-[24px] shadow-2xl border-4 border-amber-300 p-3 sm:p-5 w-full max-w-xl transform animate-modal-in"
                 onClick={(e) => e.stopPropagation()} 
             >
-                <h2 className="text-center text-xl sm:text-3xl font-black text-amber-900 mb-4 tracking-tight">어떤 속을 넣을까요?</h2>
-                <div className="grid grid-cols-4 gap-2 sm:gap-3 p-1">
+                <h2 className="text-center text-lg sm:text-2xl font-black text-amber-900 mb-3">속 재료 선택</h2>
+                <div className="grid grid-cols-4 gap-2">
                     {Object.values(FillingType).map((filling) => {
                         const fillingType = filling as FillingType;
                         const details = FILLING_DETAILS[fillingType];
@@ -33,19 +33,19 @@ const FillingSelectionModal: React.FC<FillingSelectionModalProps> = ({ isOpen, o
                             <button 
                                 key={fillingType}
                                 onClick={() => onSelect(fillingType)}
-                                className="flex flex-col items-center justify-center gap-1 p-2 sm:p-3 rounded-2xl border-2 border-amber-100 bg-amber-50 hover:bg-white hover:border-orange-400 active:scale-95 transform transition-all shadow-sm group"
+                                className="flex flex-col items-center justify-center gap-1 p-1.5 sm:p-2 rounded-xl border-2 border-amber-100 bg-amber-50 hover:border-orange-400 active:scale-90 transition-all group"
                             >
-                                <div className="w-10 h-10 sm:w-14 sm:h-14 group-hover:scale-110 transition-transform duration-150">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 group-hover:scale-110 transition-transform">
                                     <Icon />
                                 </div>
-                                <span className={`font-black text-[11px] sm:text-sm whitespace-nowrap ${details.textColor}`}>{details.label}</span>
+                                <span className={`font-black text-[10px] sm:text-xs truncate w-full text-center ${details.textColor}`}>{details.label}</span>
                             </button>
                         );
                     })}
                 </div>
                 <button 
                     onClick={onClose}
-                    className="mt-4 w-full py-2.5 bg-stone-100 text-stone-500 font-black rounded-xl hover:bg-stone-200 transition-colors text-sm"
+                    className="mt-3 w-full py-2 bg-stone-100 text-stone-500 font-black rounded-xl hover:bg-stone-200 transition-colors text-xs"
                 >
                     취소
                 </button>
